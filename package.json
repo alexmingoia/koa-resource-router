@@ -1,0 +1,38 @@
+{
+  "name": "koa-resource-router",
+  "description": "RESTful resource routing for koa and koa-router.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexmingoia/koa-resource.git"
+  },
+  "author": "Alex Mingoia <talk@alexmingoia.com>",
+  "version": "0.1.0",
+  "keywords": [
+    "rest",
+    "resource",
+    "koa",
+    "router",
+    "middleware"
+  ],
+  "main": "./lib/resource.js",
+  "dependencies": {
+    "debug": "~0.7.4",
+    "lingo": "0.0.5",
+    "path-to-regexp": "0.0.2",
+    "defaults": "~1.0.0",
+    "koa-compose": "~2.2.0"
+  },
+  "devDependencies": {
+    "koa": "0.3.0",
+    "mocha": "1.12.0",
+    "should": "1.2.2",
+    "supertest": "0.7.1"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test node_modules/mocha/bin/mocha --harmony-generators --reporter spec"
+  },
+  "engines": {
+    "node": "> 0.11.4"
+  },
+  "license": "MIT"
+}
