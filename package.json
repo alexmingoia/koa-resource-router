@@ -1,9 +1,9 @@
 {
   "name": "koa-resource-router",
-  "description": "RESTful resource routing for koa and koa-router.",
+  "description": "RESTful resource routing for koa.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexmingoia/koa-resource.git"
+    "url": "https://github.com/alexmingoia/koa-resource-router.git"
   },
   "author": "Alex Mingoia <talk@alexmingoia.com>",
   "version": "0.1.0",

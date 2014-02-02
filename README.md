@@ -24,7 +24,8 @@ npm install koa-resource-router
 ### new Resource(path, actions, options)
 
 ```javascript
-var app = require('koa')()
+var Resource = require('koa-resource-router');
+var app = require('koa')();
 
 var users = new Resource('users', {
   // GET /users
