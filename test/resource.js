@@ -99,10 +99,7 @@ describe('Resource', function() {
     request(http.createServer(app.callback()))
       .get('/users?foo')
       .expect(200)
-      .end(function(err, res) {
-        if (err) return done(err);
-        done();
-      });
+      .end(done);
   });
 
   it('responds to OPTIONS', function(done) {
