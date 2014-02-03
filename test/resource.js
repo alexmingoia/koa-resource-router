@@ -26,6 +26,34 @@ describe('Resource', function() {
     done();
   });
 
+  it('maps "new" and "show" routes correctly', function(done) {
+    var app = koa();
+    var users = new Resource('users', {
+      new: function *() {
+        this.status = 500;
+      },
+      show: function *() {
+        this.status = 200;
+      }
+    });
+    users.base.should.equal('/users');
+    app.use(users.middleware());
+    request(http.createServer(app.callback()))
+      .get('/users/test')
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        request(http.createServer(app.callback()))
+          .get('/users/new')
+          .expect(500)
+          .end(function(err, res) {
+            if (err) return done(err);
+            done();
+          });
+      });
+
+  });
+
   it('nests resources', function(done) {
     var app = koa();
     var forums = new Resource('forums', {
@@ -42,7 +70,6 @@ describe('Resource', function() {
     });
     forums.add(threads);
     threads.base.should.equal('/forums/:forum/threads');
-    app.use(threads.middleware());
     app.use(threads.middleware());
     request(http.createServer(app.callback()))
       .get('/forums/54/threads/12')
