@@ -149,6 +149,23 @@ describe('Resource', function() {
       .end(done);
   });
 
+  it('composes resource middleware for each action', function(done) {
+    var app = koa();
+
+    app.use(Resource('users', function *(next) {
+      this.status = 200;
+    }, {
+      show: function *() {
+        this.body = 'yo';
+      }
+    }).middleware());
+
+    request(http.createServer(app.callback()))
+      .get('/users/1')
+      .expect(200)
+      .end(done);
+  });
+
   it('doesn\'t call multiple controller actions', function(done) {
     var app = koa();
     var counter = 0;

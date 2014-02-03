@@ -111,8 +111,21 @@ forums.add(threads);
 
 ### Multiple middleware
 
+Run middleware before resource actions by passing middleware functions before
+your actions:
+
 ```javascript
 var users = new Resource('users', authorize, actions);
+```
+
+Run middleware for specific actions by passing an array:
+
+```javascript
+var users = new Resource('users', {
+  show: [authorize, function *(next) {
+    // ...
+  }]
+});
 ```
 
 ## MIT Licensed
