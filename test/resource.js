@@ -89,6 +89,22 @@ describe('Resource', function() {
       });
   });
 
+  it('ignores query string', function(done) {
+    var app = koa();
+    app.use(Resource('users', {
+      index: function *() {
+        this.status = 200;
+      }
+    }).middleware());
+    request(http.createServer(app.callback()))
+      .get('/users?foo')
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        done();
+      });
+  });
+
   it('doesn\'t call multiple controller actions', function(done) {
     var app = koa();
     var counter = 0;
