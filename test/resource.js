@@ -116,6 +116,39 @@ describe('Resource', function() {
       });
   });
 
+  it('ignores query string', function(done) {
+    var app = koa();
+    app.use(Resource('users', {
+      index: function *() {
+        this.status = 200;
+      }
+    }).middleware());
+    request(http.createServer(app.callback()))
+      .get('/users?foo')
+      .expect(200)
+      .end(done);
+  });
+
+  it('responds to OPTIONS', function(done) {
+    var app = koa();
+    app.use(Resource('users', {
+      index: function *() {
+        this.status = 200;
+      },
+      read: function *() {
+        this.body = 'yo'
+      },
+      update: function *() {
+        this.body = 'yo'
+      }
+    }).middleware());
+    request(http.createServer(app.callback()))
+      .options('/users/1')
+      .expect(204)
+      .expect('Allow', 'GET, PUT')
+      .end(done);
+  });
+
   it('doesn\'t call multiple controller actions', function(done) {
     var app = koa();
     var counter = 0;
