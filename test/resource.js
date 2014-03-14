@@ -100,6 +100,55 @@ describe('Resource', function() {
       });
   });
 
+  it('options.id overrides id parameter name', function(done) {
+    var app = koa();
+    app.use(Resource('users', {
+      show: function *() {
+        should.exist(this.params);
+        this.params.should.have.property('user_id', '123');
+        this.status = 200;
+      }
+    }, {
+      id: "user_id"
+    }).middleware());
+    request(http.createServer(app.callback()))
+      .get('/users/123')
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        done();
+      });
+  });
+
+  it('composes resource middleware for each action, even with a custom id param name', function(done) {
+    var app = koa();
+
+    var preRequestMiddleware = function *(next) {
+      this.status = 200;
+      yield next;
+    };
+
+    var actions = {
+      show: function *() {
+        this.params.should.have.property('user_id', '1');
+        this.body = "yo";
+      }
+    };
+
+    var options = {
+      id: "user_id"
+    };
+
+    var resource = Resource('users', preRequestMiddleware, actions, options);
+
+    app.use(resource.middleware());
+
+    request(http.createServer(app.callback()))
+      .get('/users/1')
+      .expect(200, "yo")
+      .end(done);
+  });
+
   it('routes top-level resource', function(done) {
     var app = koa();
     app.use(Resource({
