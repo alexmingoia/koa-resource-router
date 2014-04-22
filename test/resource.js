@@ -28,29 +28,66 @@ describe('Resource', function() {
 
   it('maps "new" and "show" routes correctly', function(done) {
     var app = koa();
-    var users = new Resource('users', {
-      new: function *() {
-        this.status = 500;
-      },
-      show: function *() {
-        this.status = 200;
-      }
-    });
-    users.base.should.equal('/users');
-    app.use(users.middleware());
-    request(http.createServer(app.callback()))
-      .get('/users/test')
-      .expect(200)
-      .end(function(err, res) {
-        if (err) return done(err);
-        request(http.createServer(app.callback()))
-          .get('/users/new')
-          .expect(500)
-          .end(function(err, res) {
-            if (err) return done(err);
-            done();
-          });
+
+    (function firstOrder(next) {
+      var users = new Resource('users', {
+        'new': function *() {
+          this.status = 500;
+        },
+        show: function *() {
+          this.status = 200;
+        }
       });
+
+      users.base.should.equal('/users');
+      app.use(users.middleware());
+
+      request(http.createServer(app.callback()))
+        .get('/users/test')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return next(err);
+
+          request(http.createServer(app.callback()))
+            .get('/users/new')
+            .expect(500)
+            .end(function(err, res) {
+              if (err) return next(err);
+              next(null, done);
+            });
+        });
+    })(reverseOrder);
+
+    function reverseOrder(err, done) {
+      if (err) return done(err);
+
+      var users = new Resource('users', {
+        show: function *() {
+          this.status = 200;
+        },
+        'new': function *() {
+          this.status = 500;
+        }
+      });
+
+      users.base.should.equal('/users');
+      app.use(users.middleware());
+
+      request(http.createServer(app.callback()))
+        .get('/users/new')
+        .expect(500)
+        .end(function(err, res) {
+          if (err) return done(err);
+
+          request(http.createServer(app.callback()))
+            .get('/users/test')
+            .expect(200)
+            .end(function(err, res) {
+              if (err) return done(err);
+              done();
+            });
+        });
+    };
 
   });
 
