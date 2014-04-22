@@ -26,6 +26,27 @@ describe('Resource', function() {
     done();
   });
 
+  it('ignores unsupported action object properties', function(done) {
+    var app = koa();
+
+    var users = new Resource('users', {
+      invalid: true,
+      show: function *() {
+        this.status = 200;
+      }
+    });
+
+    app.use(users.middleware());
+
+    request(http.createServer(app.callback()))
+      .get('/users/123')
+      .expect(200)
+      .end(function(err, res) {
+        if (err) return done(err);
+        done();
+      });
+  });
+
   it('maps "new" and "show" routes correctly', function(done) {
     var app = koa();
 
