@@ -6,7 +6,7 @@
     "url": "https://github.com/alexmingoia/koa-resource-router.git"
   },
   "author": "Alex Mingoia <talk@alexmingoia.com>",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "keywords": [
     "rest",
     "resource",
@@ -16,7 +16,7 @@
   ],
   "main": "./lib/resource.js",
   "dependencies": {
-    "debug": "~0.7.4",
+    "debug": "^0.7.4",
     "lingo": "0.0.5",
     "path-to-regexp": "0.0.2",
     "defaults": "~1.0.0",
