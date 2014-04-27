@@ -178,6 +178,36 @@ describe('Resource', function() {
       });
   });
 
+  it('composes both global and per function middleware', function(done) {
+    var app = koa();
+
+    var preRequestMiddleware = function *(next) {
+      this.status = 200;
+      this.body = 'firstMiddleware';
+      yield next;
+    };
+
+    var actions = {
+      show: [
+        function *() {
+          this.body += '|secondMiddleware';
+        }, 
+        function *() {
+          
+        }
+      ]
+    };
+
+    var resource = Resource('users', preRequestMiddleware, actions);
+
+    app.use(resource.middleware());
+
+    request(http.createServer(app.callback()))
+      .get('/users/1')
+      .expect(200, "firstMiddleware|secondMiddleware")
+      .end(done);
+  });
+
   it('composes resource middleware for each action, even with a custom id param name', function(done) {
     var app = koa();
 
