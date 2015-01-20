@@ -16,10 +16,10 @@
   ],
   "main": "./lib/resource.js",
   "dependencies": {
-    "debug": "^0.7.4",
-    "defaults": "~1.0.0",
-    "koa-compose": "~2.2.0",
-    "path-to-regexp": "0.0.2",
+    "debug": "^2.1.1",
+    "defaults": "^1.0.0",
+    "koa-compose": "^2.3.0",
+    "path-to-regexp": "^1.0.3",
     "pluralize": "^1.1.1"
   },
   "devDependencies": {
