@@ -14,7 +14,7 @@ describe('Resource', function() {
       index: function *() {},
       show: function *() {}
     });
-    resource.should.be.a('object');
+    resource.should.be.have.type('object');
     resource.should.have.property('name', 'forums');
     resource.should.have.property('id', 'forum');
     resource.should.have.property('routes');
